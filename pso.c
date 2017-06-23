@@ -22,13 +22,21 @@
 #include <math.h> // for cos(), pow(), sqrt() etc.
 #include <float.h> // for DBL_MAX
 #include <string.h> // for mem*
-
-#include <gsl/gsl_rng.h>
+#include <stdlib.h> // for rand
+#include <stdio.h>
 
 #include "pso.h"
 
 
+double gsl_rng_uniform(void * p)
+{
+    return (double)rand() / (double)((unsigned)RAND_MAX + 1);
+}
 
+int gsl_rng_uniform_int(void * p, int size )
+{
+    return (int)(rand() % size);
+}
 
 //==============================================================
 // calulate swarm size based on dimensionality
@@ -224,7 +232,6 @@ void pso_set_default_settings(pso_settings_t *settings) {
 
 
 
-
 //==============================================================
 //                     PSO ALGORITHM
 //==============================================================
@@ -232,7 +239,6 @@ void pso_solve(pso_obj_fun_t obj_fun, void *obj_fun_params,
 	       pso_result_t *solution, pso_settings_t *settings)
 {
 
-  int free_rng = 0; // whether to free settings->rng when finished
   // Particles
   double pos[settings->size][settings->dim]; // position matrix
   double vel[settings->size][settings->dim]; // velocity matrix
@@ -256,17 +262,9 @@ void pso_solve(pso_obj_fun_t obj_fun, void *obj_fun_params,
   double (*calc_inertia_fun)(); // inertia weight update function
 
 
-  // CHECK RANDOM NUMBER GENERATOR
-  if (! settings->rng) {
-    // initialize random number generator
-    gsl_rng_env_setup();
-    // allocate the RNG
-    settings->rng = gsl_rng_alloc(gsl_rng_default);
-    // seed the generator
-    gsl_rng_set(settings->rng, settings->seed);
-    // remember to free the RNG
-    free_rng = 1;
-  }
+
+  srand(settings->seed);   // should only be called once
+
 
   // SELECT APPROPRIATE NHOOD UPDATE FUNCTION
   switch (settings->nhood_strategy)
@@ -419,7 +417,4 @@ void pso_solve(pso_obj_fun_t obj_fun, void *obj_fun_params,
 
   }
 
-  // free RNG??
-  if (free_rng)
-    gsl_rng_free(settings->rng);
 }

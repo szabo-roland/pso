@@ -21,7 +21,8 @@
 
 #include <math.h>
 #include <string.h>
-#include <gsl/gsl_rng.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "pso.h"
 
 
