@@ -23,11 +23,11 @@ There's also an implementation in Go which can be found
 ## USAGE
 
 
-Just include pso.h and pso.c in your code. You need to have the [GNU
+Just include pso.h and pso.c in your code. <del>You need to have the [GNU
 Scientific Library](http://www.gnu.org/software/gsl/) and the
 respective development (i.e. header) files in order to include pso.c
 in your application. In your Makefile add `-lgsl` and `-lgslcblas` to
-your `LDFLAGS`.
+your `LDFLAGS`.</del>
 
 In order to use `pso_solve()`, you need :
 
